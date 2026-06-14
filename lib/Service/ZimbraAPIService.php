@@ -619,6 +619,37 @@ class ZimbraAPIService {
 		}
 	}
 
+	/**
+	 * Generate a pre-auth URL that can be used to auto-login via browser redirect
+	 *
+	 * @param string $userId
+	 * @return string|null The pre-auth URL or null if not available
+	 */
+	public function getPreAuthUrl(string $userId): ?string {
+		$preAuthKey = $this->decryptIfNotEmpty($this->config->getAppValue(Application::APP_ID, 'pre_auth_key'));
+		if (!$preAuthKey) {
+			return null;
+		}
+
+		$login = $this->config->getUserValue($userId, Application::APP_ID, 'login');
+		if (!$login) {
+			return null;
+		}
+
+		$adminUrl = $this->config->getAppValue(Application::APP_ID, 'admin_instance_url');
+		$baseUrl = $this->config->getUserValue($userId, Application::APP_ID, 'url', $adminUrl) ?: $adminUrl;
+		if (!$baseUrl) {
+			return null;
+		}
+
+		$timestamp = (string)round(microtime(true) * 1000);
+		$preauth = $this->hmac_sha1($preAuthKey, $login . '|name|0|' . $timestamp);
+
+		return $baseUrl . '/service/preauth?account=' . urlencode($login)
+			. '&by=name&timestamp=' . $timestamp
+			. '&expires=0&preauth=' . urlencode($preauth);
+	}
+
 	private function getRequestHeader(string $login, string $token): array {
 		return [
 			'context' => [
