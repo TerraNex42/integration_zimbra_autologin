@@ -52,6 +52,7 @@ class Personal implements ISettings {
 		$zimbraUserId = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_id');
 		$zimbraUserName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name');
 		$zimbraUserDisplayName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_displayname');
+		$zimbraLogin = $this->config->getUserValue($this->userId, Application::APP_ID, 'login');
 		$adminUrl = $this->config->getAppValue(Application::APP_ID, 'admin_instance_url');
 		$url = $this->config->getUserValue($this->userId, Application::APP_ID, 'url', $adminUrl) ?: $adminUrl;
 
@@ -61,6 +62,7 @@ class Personal implements ISettings {
 			'user_id' => $zimbraUserId,
 			'user_name' => $zimbraUserName,
 			'user_displayname' => $zimbraUserDisplayName,
+			'login' => $zimbraLogin,
 			'search_mails_enabled' => $searchMailsEnabled,
 			'navigation_enabled' => $navigationEnabled,
 		];

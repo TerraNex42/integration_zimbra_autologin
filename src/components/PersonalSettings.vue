@@ -25,6 +25,11 @@
 				<input id="zimbra-login"
 					v-model="login"
 					type="text"
+					name="zimbra-login"
+					autocomplete="section-zimbra username"
+					autocapitalize="none"
+					autocorrect="off"
+					spellcheck="false"
 					:placeholder="t('integration_zimbra', 'Zimbra login')"
 					@keyup.enter="onConnectClick">
 			</div>
@@ -36,6 +41,8 @@
 				<input id="zimbra-password"
 					v-model="password"
 					type="password"
+					name="zimbra-password"
+					autocomplete="section-zimbra current-password"
 					:placeholder="t('integration_zimbra', 'Zimbra password')"
 					@keyup.enter="onConnectClick">
 			</div>
@@ -132,10 +139,11 @@ export default {
 	props: [],
 
 	data() {
+		const state = loadState('integration_zimbra', 'user-config')
 		return {
-			state: loadState('integration_zimbra', 'user-config'),
+			state,
 			loading: false,
-			login: '',
+			login: state.login || '',
 			password: '',
 			twoFactorRequired: false,
 			twoFactorCode: '',
