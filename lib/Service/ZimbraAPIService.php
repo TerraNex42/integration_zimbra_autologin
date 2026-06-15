@@ -642,12 +642,19 @@ class ZimbraAPIService {
 			return null;
 		}
 
-		$timestamp = (string)round(microtime(true) * 1000);
-		$preauth = $this->hmac_sha1($preAuthKey, $login . '|name|0|' . $timestamp);
+		$baseUrl = rtrim($baseUrl, '/');
+		$parts = parse_url($baseUrl);
+		if ($parts === false || !isset($parts['scheme']) || !in_array($parts['scheme'], ['http', 'https'], true)) {
+			return null;
+		}
+
+		$timestamp = (string)((int)floor(microtime(true) * 1000));
+		$expires = '60';
+		$preauth = $this->hmac_sha1($preAuthKey, $login . '|name|' . $expires . '|' . $timestamp);
 
 		return $baseUrl . '/service/preauth?account=' . urlencode($login)
 			. '&by=name&timestamp=' . $timestamp
-			. '&expires=0&preauth=' . urlencode($preauth);
+			. '&expires=' . $expires . '&preauth=' . urlencode($preauth);
 	}
 
 	private function getRequestHeader(string $login, string $token): array {
