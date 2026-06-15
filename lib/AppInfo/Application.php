@@ -107,7 +107,7 @@ class Application extends App implements IBootstrap {
 					return [
 						'id' => self::APP_ID,
 						'order' => 10,
-						'href' => $zimbraUrl,
+						'href' => $urlGenerator->linkToRoute(self::APP_ID . '.zimbraAPI.autologin'),
 						'icon' => $urlGenerator->imagePath(self::APP_ID, 'app.svg'),
 						'name' => $l10n->t('Zimbra'),
 						'target' => '_blank',

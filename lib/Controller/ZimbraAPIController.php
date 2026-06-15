@@ -13,6 +13,7 @@ namespace OCA\Zimbra\Controller;
 
 use Exception;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\AppFramework\Http\DataResponse;
@@ -83,6 +84,23 @@ class ZimbraAPIController extends Controller {
 		} else {
 			return new DataResponse($result);
 		}
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return RedirectResponse
+	 */
+	public function autologin(): RedirectResponse {
+		$preAuthUrl = $this->zimbraAPIService->getPreAuthUrl($this->userId);
+		if ($preAuthUrl !== null) {
+			return new RedirectResponse($preAuthUrl);
+		}
+
+		// Fallback: redirect to the Zimbra instance URL without pre-auth
+		$adminUrl = $this->config->getAppValue(Application::APP_ID, 'admin_instance_url');
+		$zimbraUrl = $this->config->getUserValue($this->userId, Application::APP_ID, 'url', $adminUrl) ?: $adminUrl;
+		return new RedirectResponse($zimbraUrl);
 	}
 
 	/**

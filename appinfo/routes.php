@@ -16,6 +16,7 @@ return [
 		['name' => 'config#setSensitiveConfig', 'url' => '/sensitive-config', 'verb' => 'PUT'],
 		['name' => 'config#setAdminConfig', 'url' => '/admin-config', 'verb' => 'PUT'],
 
+		['name' => 'zimbraAPI#autologin', 'url' => '/autologin', 'verb' => 'GET'],
 		['name' => 'zimbraAPI#getContacts', 'url' => '/contacts', 'verb' => 'GET'],
 		['name' => 'zimbraAPI#getUpcomingEvents', 'url' => '/upcoming-events', 'verb' => 'GET'],
 		['name' => 'zimbraAPI#getUnreadEmails', 'url' => '/unread-emails', 'verb' => 'GET'],
